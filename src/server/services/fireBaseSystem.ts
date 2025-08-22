@@ -6,18 +6,15 @@ import { PlayerDataTemplate } from "shared/services/templates/playerDataTemplate
 import { playerDataMap } from "shared/services/sharedData/playerDataMap";
 
 const firebaseConfig = {
-	databaseURL: "https://flamework-b1fc9-default-rtdb.firebaseio.com",
 	apiKey: "WimuZqqV4IRd6htQQp6pzx5yIjvRljxg5kAcouzO",
+	databaseURL: "https://flamework-b1fc9-default-rtdb.firebaseio.com/",
 };
-// Initialize Firebase - Note: This may still not work with just an API key
-// You might need to use Firebase Admin SDK or a service account key for server-side access
 let firebase: Firebase;
 
 try {
 	firebase = new Firebase(firebaseConfig.databaseURL, firebaseConfig.apiKey);
 } catch (error) {
 	warn(`Failed to initialize Firebase: ${script.Name}`, error);
-	// Create a fallback instance or handle the error appropriately
 }
 
 @Service()
@@ -33,8 +30,6 @@ export class fireBaseSystem implements OnStart {
 			if (existingData) {
 				const playerData = existingData as PlayerDataTemplate;
 				playerDataMap.set(player.Name, playerData);
-				// Notify OnPlayerEvents that data is loaded
-				// Notify the client about their data
 				return;
 			}
 
@@ -50,29 +45,22 @@ export class fireBaseSystem implements OnStart {
 			try {
 				playerDataMap.set(player.Name, playerData);
 				firebase.set(player.Name, playerData);
-				// Notify OnPlayerEvents that data is loaded
-				// Notify the client about their new data
 			} catch (error) {
 				warn(`Failed to save player data for ${player.Name}: ${script.Name}`, error);
 			}
 		});
 
-		// When a player leaves, remove their data from the map
 		Players.PlayerRemoving.Connect((player: Player) => {
 			playerDataMap.delete(player.Name);
-			// Notify OnPlayerEvents that data is removed
 		});
 
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		Functions.requestAllPlayerData.setCallback((player?: Player) => {
+		Functions.requestAllPlayerData.setCallback(() => {
 			return playerDataMap;
 		});
 	}
 
-	// Method to update player data and notify clients
 	public updatePlayerData(playerName: string, newData: PlayerDataTemplate): void {
 		playerDataMap.set(playerName, newData);
-		// Notify OnPlayerEvents that data is updated
 
 		const player = Players.FindFirstChild(playerName) as Player;
 		if (player) {

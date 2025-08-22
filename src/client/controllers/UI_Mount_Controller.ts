@@ -5,6 +5,7 @@ import { StrictMode as ReactStrictMode } from "@rbxts/react";
 import ReactRoblox, { createPortal, createRoot } from "@rbxts/react-roblox";
 import { Players } from "@rbxts/services";
 import { BadgeAwardApp } from "client/components/badgeAward";
+import { teamTSXApp } from "client/components/TeamUI";
 
 @Controller()
 export class UI implements OnStart {
@@ -13,7 +14,6 @@ export class UI implements OnStart {
 
 	constructor() {
 		this.playerGUI = Players.LocalPlayer.WaitForChild("PlayerGui") as PlayerGui;
-		// Create a ScreenGui instance to hold our React components
 		const screenGui = new Instance("ScreenGui");
 		screenGui.Name = "BadgeAwardUI";
 		screenGui.Parent = this.playerGUI;
@@ -23,5 +23,6 @@ export class UI implements OnStart {
 
 	onStart(): void {
 		this.root.render(React.createElement(ReactStrictMode, {}, React.createElement(BadgeAwardApp, {})));
+		this.root.render(React.createElement(ReactStrictMode, {}, React.createElement(teamTSXApp, {})));
 	}
 }
