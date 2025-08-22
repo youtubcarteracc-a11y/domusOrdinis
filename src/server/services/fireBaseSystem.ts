@@ -7,16 +7,23 @@ import { playerDataMap } from "shared/services/sharedData/playerDataMap";
 import { $env } from "rbxts-transform-env";
 
 const firebaseConfig = {
-	apiKey: $env.string("FIREBASE_API_KEY") as string,
-	databaseURL: $env.string("FIREBASE_DATABASE_URL") as string,
+	apiKey: $env.string("FIREBASE_API_KEY"),
+	databaseURL: $env.string("FIREBASE_DATABASE_URL"),
 };
 
 let firebase: Firebase;
 
-try {
-	firebase = new Firebase(firebaseConfig.databaseURL, firebaseConfig.apiKey);
-} catch (error) {
-	warn(`Failed to initialize Firebase: ${script.Name}`, error);
+// Validate that required environment variables are present
+if (!firebaseConfig.apiKey || !firebaseConfig.databaseURL) {
+	warn(
+		`Missing Firebase configuration: ${script.Name}. Please check FIREBASE_API_KEY and FIREBASE_DATABASE_URL environment variables.`,
+	);
+} else {
+	try {
+		firebase = new Firebase(firebaseConfig.databaseURL, firebaseConfig.apiKey);
+	} catch (error) {
+		warn(`Failed to initialize Firebase: ${script.Name}`, error);
+	}
 }
 
 @Service()

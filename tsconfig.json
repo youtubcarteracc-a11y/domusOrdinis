@@ -26,11 +26,11 @@
 		"experimentalDecorators": true,
 		"plugins": [
 			{
-				"transform": ["rbxts-transformer-flamework", "rbxts-transform-env"],
+				"transform": "rbxts-transformer-flamework",
 				"obfuscation": false,
-				"files": [
-					".env"
-				]
+			},
+			{
+				"transform": "rbxts-transform-env"
 			}
 		]
 	}
