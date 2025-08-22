@@ -4,11 +4,13 @@ import { Players } from "@rbxts/services";
 import { Functions } from "server/network";
 import { PlayerDataTemplate } from "shared/services/templates/playerDataTemplate";
 import { playerDataMap } from "shared/services/sharedData/playerDataMap";
+import { $env } from "rbxts-transform-env";
 
 const firebaseConfig = {
-	apiKey: "WimuZqqV4IRd6htQQp6pzx5yIjvRljxg5kAcouzO",
-	databaseURL: "https://flamework-b1fc9-default-rtdb.firebaseio.com/",
+	apiKey: $env.string("FIREBASE_API_KEY") as string,
+	databaseURL: $env.string("FIREBASE_DATABASE_URL") as string,
 };
+
 let firebase: Firebase;
 
 try {

@@ -34,6 +34,7 @@
     "@rbxts/react-roblox": "^17.2.3",
     "@rbxts/ripple": "^0.9.3",
     "@rbxts/services": "^1.5.5",
-    "@rbxts/vide": "^0.5.7"
+    "@rbxts/vide": "^0.5.7",
+    "rbxts-transform-env": "^3.0.0"
   }
 }
