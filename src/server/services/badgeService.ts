@@ -15,14 +15,8 @@ export class badgeService implements OnStart {
 				if (debounce) {
 					return;
 				}
-				print(
-					`${playerWhoClicked.Name} clicked ${part.GetAttribute("inputNameHere")} to earn ${part.GetAttribute(
-						"inputBadgeIDHere",
-					)}`,
-				);
 				BadgeService.AwardBadge(playerWhoClicked.UserId, part.GetAttribute("inputBadgeIDHere") as number);
-				Events.requestBadgeAnimation.fire(playerWhoClicked, part.GetAttribute("inputNameHere") as string);
-
+				Events.requestBadgeAnimation.fire(playerWhoClicked, part.GetAttribute("inputBadgeIDHere") as number);
 				debounce = true;
 				task.wait(3);
 				debounce = false;

@@ -8,7 +8,8 @@ interface ClientToServerEvents {
 interface ServerToClientEvents {
 	updatePlayerData(playerData: PlayerDataTemplate): void;
 	updateAllPlayerData(playerDataMap: Map<string, PlayerDataTemplate>): void;
-	requestBadgeAnimation(badgeText: string): void;
+	requestBadgeAnimation(badgeID: number): void;
+	requestShadow(player: Player): void;
 }
 
 interface ClientToServerFunctions {

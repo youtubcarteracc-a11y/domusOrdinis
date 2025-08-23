@@ -72,9 +72,7 @@ export class teamService implements OnStart {
 
 		if (canJoinTeam) {
 			player.Team = Teams.FindFirstChild(teamConfig.teamName) as Team;
-			if (teamConfig.key === "HP") {
-				print(player.Team);
-			}
+			player.LoadCharacter();
 		}
 	}
 

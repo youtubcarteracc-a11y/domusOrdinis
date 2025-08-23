@@ -33,7 +33,7 @@ export function teamTSXApp() {
 	}
 
 	useEffect(() => {
-		const connection = UserInputService.InputBegan.Connect((input: InputObject) => {
+		UserInputService.InputBegan.Connect((input: InputObject) => {
 			if (input.KeyCode === Enum.KeyCode.M) {
 				if (debounce) return;
 				handleOpen();
@@ -43,12 +43,7 @@ export function teamTSXApp() {
 				});
 			}
 		});
-
-		// Cleanup function to disconnect the event listener when component unmounts
-		return () => {
-			connection.Disconnect();
-		};
-	}, []); // Empty dependency array means this effect runs once on mount
+	}, []);
 
 	return (
 		<screengui

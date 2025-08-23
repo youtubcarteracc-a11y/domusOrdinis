@@ -20,7 +20,7 @@ try {
 }
 
 @Service()
-export class fireBaseSystem implements OnStart {
+export class firebaseService implements OnStart {
 	onStart(): void {
 		if (!firebase) {
 			warn(`Database not initialized. ${script.Name}`);
