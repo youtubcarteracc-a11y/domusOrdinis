@@ -1,6 +1,55 @@
-import React from "@rbxts/react";
-
+import { useMotion } from "@rbxts/pretty-react-hooks";
+import React, { useState, useEffect } from "@rbxts/react";
+import Ripple from "@rbxts/ripple";
+import { UserInputService } from "@rbxts/services";
+import { Events } from "client/network";
+const teamConfig = {
+	HP: "Holy Protectorate",
+	BP: "Blitz Personnel",
+	BA: "Blitz Authority",
+	IM: "Imperator",
+	VI: "Visitor",
+};
 export function teamTSXApp() {
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	const [isOpen, setIsOpen] = useState(false);
+	const [debounce, setDebounce] = useState(false);
+	const [position, setPosition] = useMotion<UDim2>(new UDim2(-0.1, 0, 0.5, 0));
+	const [transparency, setTransparency] = useMotion<number>(1);
+
+	function handleOpen() {
+		setIsOpen((currentIsOpen) => {
+			if (currentIsOpen === true) {
+				setPosition.spring(new UDim2(-0.1, 0, 0.5, 0), Ripple.config.spring.molasses);
+				setTransparency.spring(1, Ripple.config.spring.molasses);
+				return false;
+			} else if (currentIsOpen === false) {
+				setPosition.spring(new UDim2(0.1, 0, 0.5, 0), Ripple.config.spring.gentle);
+				setTransparency.spring(0, Ripple.config.spring.gentle);
+				return true;
+			}
+			return currentIsOpen;
+		});
+	}
+
+	useEffect(() => {
+		const connection = UserInputService.InputBegan.Connect((input: InputObject) => {
+			if (input.KeyCode === Enum.KeyCode.M) {
+				if (debounce) return;
+				handleOpen();
+				setDebounce(true);
+				task.delay(0.5, () => {
+					setDebounce(false);
+				});
+			}
+		});
+
+		// Cleanup function to disconnect the event listener when component unmounts
+		return () => {
+			connection.Disconnect();
+		};
+	}, []); // Empty dependency array means this effect runs once on mount
+
 	return (
 		<screengui
 			key="TeamUI"
@@ -13,19 +62,27 @@ export function teamTSXApp() {
 				AnchorPoint={new Vector2(0.5, 0.5)}
 				BackgroundColor3={Color3.fromRGB(216, 218, 177)}
 				BorderSizePixel={0}
-				Position={new UDim2(0.2, 0, 0.5, 0)}
+				Position={position}
+				GroupTransparency={transparency}
 				Size={new UDim2(0, 236, 0, 350)}
 			>
-				<uistroke Color={Color3.fromRGB(131, 127, 76)} Thickness={5.2} />
+				<uistroke Color={Color3.fromRGB(131, 127, 76)} Thickness={5.2} Transparency={transparency} />
 				<frame
 					key="Holy Protectorate"
 					Active={true}
+					Event={{
+						InputBegan: (frame: Frame, input: InputObject) => {
+							if (input.UserInputType === Enum.UserInputType.MouseButton1) {
+								Events.sendTeamRequest.fire(teamConfig.HP);
+							}
+						},
+					}}
 					AnchorPoint={new Vector2(0.5, 0.5)}
 					AutomaticSize={Enum.AutomaticSize.XY}
 					BackgroundColor3={Color3.fromRGB(74, 74, 74)}
 					BorderSizePixel={0}
 					Position={new UDim2(0.164, 0, 0.062, 0)}
-					Size={new UDim2(0.8300000000000001, 0, 0.14, 0)}
+					Size={new UDim2(0.83, 0, 0.14, 0)}
 				>
 					<uistroke Color={Color3.fromRGB(131, 127, 76)} Thickness={5.2} />
 					<imagelabel
@@ -62,8 +119,15 @@ export function teamTSXApp() {
 					AutomaticSize={Enum.AutomaticSize.XY}
 					BackgroundColor3={Color3.fromRGB(74, 74, 74)}
 					BorderSizePixel={0}
+					Event={{
+						InputBegan: (frame: Frame, input: InputObject) => {
+							if (input.UserInputType === Enum.UserInputType.MouseButton1) {
+								Events.sendTeamRequest.fire(teamConfig.BP);
+							}
+						},
+					}}
 					Position={new UDim2(0.164, 0, 0.246, 0)}
-					Size={new UDim2(0.8300000000000001, 0, 0.14, 0)}
+					Size={new UDim2(0.83, 0, 0.14, 0)}
 				>
 					<uistroke Color={Color3.fromRGB(131, 127, 76)} Thickness={5.2} />
 					<imagelabel
@@ -101,7 +165,14 @@ export function teamTSXApp() {
 					BackgroundColor3={Color3.fromRGB(74, 74, 74)}
 					BorderSizePixel={0}
 					Position={new UDim2(0.164, 0, 0.431, 0)}
-					Size={new UDim2(0.8300000000000001, 0, 0.14, 0)}
+					Size={new UDim2(0.83, 0, 0.14, 0)}
+					Event={{
+						InputBegan: (frame: Frame, input: InputObject) => {
+							if (input.UserInputType === Enum.UserInputType.MouseButton1) {
+								Events.sendTeamRequest.fire(teamConfig.BA);
+							}
+						},
+					}}
 				>
 					<uistroke Color={Color3.fromRGB(131, 127, 76)} Thickness={5.2} />
 					<imagelabel
@@ -139,7 +210,14 @@ export function teamTSXApp() {
 					BackgroundColor3={Color3.fromRGB(74, 74, 74)}
 					BorderSizePixel={0}
 					Position={new UDim2(0.164, 0, 0.615, 0)}
-					Size={new UDim2(0.8300000000000001, 0, 0.14, 0)}
+					Size={new UDim2(0.83, 0, 0.14, 0)}
+					Event={{
+						InputBegan: (frame: Frame, input: InputObject) => {
+							if (input.UserInputType === Enum.UserInputType.MouseButton1) {
+								Events.sendTeamRequest.fire(teamConfig.IM);
+							}
+						},
+					}}
 				>
 					<uistroke Color={Color3.fromRGB(131, 127, 76)} Thickness={5.2} />
 					<imagelabel
@@ -184,7 +262,14 @@ export function teamTSXApp() {
 					BackgroundColor3={Color3.fromRGB(74, 74, 74)}
 					BorderSizePixel={0}
 					Position={new UDim2(0.164, 0, 0.8, 0)}
-					Size={new UDim2(0.8300000000000001, 0, 0.14, 0)}
+					Size={new UDim2(0.83, 0, 0.14, 0)}
+					Event={{
+						InputBegan: (frame: Frame, input: InputObject) => {
+							if (input.UserInputType === Enum.UserInputType.MouseButton1) {
+								Events.sendTeamRequest.fire(teamConfig.VI);
+							}
+						},
+					}}
 				>
 					<uistroke Color={Color3.fromRGB(131, 127, 76)} Thickness={5.2} />
 					<imagelabel

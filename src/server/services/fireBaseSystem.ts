@@ -22,8 +22,6 @@ try {
 @Service()
 export class fireBaseSystem implements OnStart {
 	onStart(): void {
-		print(firebaseConfig.testDataKey);
-		print(firebaseConfig.testDataURL);
 		if (!firebase) {
 			warn(`Database not initialized. ${script.Name}`);
 			return;
@@ -41,8 +39,6 @@ export class fireBaseSystem implements OnStart {
 				playerIdentificationEntity: {
 					age: player.AccountAge,
 					robloxId: player.UserId,
-					money: 0,
-					badges: { listofBadges: [] },
 				},
 			};
 
@@ -70,7 +66,6 @@ export class fireBaseSystem implements OnStart {
 		if (player) {
 			print(player.Name, newData.playerIdentificationEntity.age);
 		}
-		// Save to Firebase
 		if (firebase) {
 			firebase.set(playerName, newData);
 		}

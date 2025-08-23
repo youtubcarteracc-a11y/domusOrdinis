@@ -1,7 +1,9 @@
 import { Networking } from "@flamework/networking";
 import { PlayerDataTemplate } from "./services/templates/playerDataTemplate";
 
-interface ClientToServerEvents {}
+interface ClientToServerEvents {
+	sendTeamRequest(teamName: string): void;
+}
 
 interface ServerToClientEvents {
 	updatePlayerData(playerData: PlayerDataTemplate): void;
